@@ -92,7 +92,8 @@ public class Client extends Thread{
 					out.writeBytes(title + "\n");
 					//read and print output from server
 					int count = Integer.parseInt(in.readLine());
-					System.out.println("Client: count received = " + count);
+					System.out.println(in.readLine());
+					//System.out.println("Client: count received = " + count);
 					if(count == 0){
 						System.out.println("Sorry currently none of the peers contain the requested RFC");
 					}else{

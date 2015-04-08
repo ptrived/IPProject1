@@ -40,6 +40,8 @@ public class Server extends Thread{
 		try {
 			System.out.println("P2P-CI/1.0 system is up");
 			Socket serverSocket = myService.accept();
+			int statusNum;
+			String output;
 			while(true){
 				BufferedReader in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
 				//DataInputStream in = new DataInputStream(serverSocket.getInputStream());
@@ -81,8 +83,8 @@ public class Server extends Thread{
 					}
 					// System.out.println("SERVER :: After add : count = " + peerMap.size());
 					// sending output to client
-					int statusNum=200;				
-					String output = sysName+" "+statusNum+" "+Status.statusMap.get(statusNum)+"\n";
+					statusNum=200;				
+					output = sysName+" "+statusNum+" "+Status.statusMap.get(statusNum)+"\n";
 					//output.concat(" "+statusNum+" "+Status.statusMap.get(statusNum)+"\n");
 					System.out.println(output);
 					out.writeBytes(output);
@@ -98,8 +100,13 @@ public class Server extends Thread{
 					if(peerMap.containsKey(RFCNum)){
 						data = peerMap.get(RFCNum);
 						List<String> peerlist = data.peers;
-						System.out.println("SERVER :: sending count = " + peerlist.size());
+						//System.out.println("SERVER :: sending count = " + peerlist.size());
 						out.writeBytes(peerlist.size()+ "\n");
+						statusNum=200;				
+						output = sysName+" "+statusNum+" "+Status.statusMap.get(statusNum)+"\n";
+						//output.concat(" "+statusNum+" "+Status.statusMap.get(statusNum)+"\n");
+						System.out.println(output);
+						out.writeBytes(output);
 						for(String peer : peerlist){
 							portNumber = activePeers.get(peer);
 							out.writeBytes("RFC " + RFCNum + " " + title + " " + peer + " " + portNumber + "\n");
