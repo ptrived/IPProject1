@@ -26,11 +26,11 @@ public class Server extends Thread{
 		peerMap = new HashMap<Integer, RFCData>();
 		try {
 			myService = new ServerSocket(portNum);
-			myService.setSoTimeout(10000);
+			//myService.setSoTimeout(10000);
 		} catch (SocketException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
@@ -59,7 +59,7 @@ public class Server extends Thread{
 					break;
 				case ADD:
 					hostname = in.readUTF();
-					portNumber = Integer.parseInt(in.readUTF());
+					portNumber = in.readInt();
 					activePeers.put(hostname, portNumber);
 					RFCNum = Integer.parseInt(command[2]);
 					title = in.readUTF();
