@@ -30,7 +30,8 @@ public class Client extends Thread{
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			OutputStream outToServer = client.getOutputStream();
 			DataOutputStream out  = new DataOutputStream(outToServer);
-			DataInputStream in = new DataInputStream(client.getInputStream());
+			//DataInputStream in = new DataInputStream(client.getInputStream());
+			BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			
 			while(true){
 				System.out.println("Enter the command:");
@@ -40,62 +41,71 @@ public class Client extends Thread{
 
 				if(cmdArray[0].equalsIgnoreCase("add"))
 					cmd =  Command.ADD;
-				if(cmdArray[0].equalsIgnoreCase("list"))
+				if(cmdArray[0].equalsIgnoreCase("list all"))
 					cmd = Command.LIST;
 				if(cmdArray[0].equalsIgnoreCase("lookup"))
 					cmd = Command.LOOKUP;
-				String hostname, title;
-				int portNum;
+				String hostname, title, portNum;
+				//int portNum;
 				
 				switch(cmd){
 				case WRONG:
 					continue;
 				case ADD:
-					out.writeUTF(command);
+					out.writeBytes(command+"\n");
 					System.out.print("Host : ");
 					hostname = br.readLine();
-					System.out.println();
-					out.writeUTF(hostname);
+					out.writeBytes(hostname+"\n");
 					System.out.print("Port : ");
-					portNum = Integer.parseInt(br.readLine());
-					System.out.println();
-					out.writeInt(portNum);
+					portNum = br.readLine();
+					out.writeBytes(portNum+"\n");
 					System.out.print("Title : ");
 					title = br.readLine();
-					System.out.println();
-					out.writeUTF(title);
-					System.out.println(in.readUTF());
+					out.writeBytes(title+"\n");
+					System.out.println(in.readLine());
 					break;
 				case LIST:
-					out.writeUTF(command);
+					out.writeBytes(command + "\n");
 					System.out.print("Host : ");
 					hostname = br.readLine();
-					System.out.println();
-					out.writeUTF(hostname);
+					out.writeBytes(hostname + "\n");
 					System.out.print("Port : ");
-					portNum = Integer.parseInt(br.readLine());
-					System.out.println();
-					out.writeInt(portNum);
+					portNum = br.readLine();
+					out.writeBytes(portNum + "\n");
+					//read and print output from server
+					int listSize , mapSize = Integer.parseInt(in.readLine());
+					for(int i = 0; i < mapSize; i++){
+						listSize = Integer.parseInt(in.readLine());
+						for(int j = 0; j < listSize; j++){
+							System.out.println(in.readLine());
+						}
+					}
 					break;
 				case LOOKUP:
-					out.writeUTF(command);
+					out.writeBytes(command + "\n");
 					System.out.print("Host : ");
 					hostname = br.readLine();
-					System.out.println();
-					out.writeUTF(hostname);
+					out.writeBytes(hostname + "\n");
 					System.out.print("Port : ");
-					portNum = Integer.parseInt(br.readLine());
-					System.out.println();
-					out.writeInt(portNum);
+					portNum = br.readLine();
+					out.writeBytes(portNum + "\n");
 					System.out.print("Title : ");
 					title = br.readLine();
-					System.out.println();
-					out.writeUTF(title);
+					out.writeBytes(title + "\n");
+					//read and print output from server
+					int count = Integer.parseInt(in.readLine());
+					System.out.println("Client: count received = " + count);
+					if(count == 0){
+						System.out.println("Sorry currently none of the peers contain the requested RFC");
+					}else{
+						for(int i = 0; i < count; i++){
+							System.out.println(in.readLine());
+						}
+					}
 					break;
 				}
 				
-				//TODO :: server response part 
-				//client.close();
+				
 			}
 		}catch(Exception e){
 			e.printStackTrace();

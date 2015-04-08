@@ -1,6 +1,8 @@
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -26,7 +28,6 @@ public class Server extends Thread{
 		peerMap = new HashMap<Integer, RFCData>();
 		try {
 			myService = new ServerSocket(portNum);
-			//myService.setSoTimeout(10000);
 		} catch (SocketException e) {
 			//e.printStackTrace();
 		} catch (IOException e) {
@@ -35,18 +36,20 @@ public class Server extends Thread{
 	}
 
 	public void run(){
+		try {
+		Socket serverSocket = myService.accept();
 		while(true){
-			try {
-				Socket serverSocket = myService.accept();
-				DataInputStream in = new DataInputStream(serverSocket.getInputStream());
+				BufferedReader in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
+				//DataInputStream in = new DataInputStream(serverSocket.getInputStream());
 				OutputStream outToServer = serverSocket.getOutputStream();
 				DataOutputStream out  = new DataOutputStream(outToServer);
-
-				String command[] = in.readUTF().split(" ");
+				
+				
+				String command[] = in.readLine().split(" ");
 				Command cmd = Command.WRONG;
 				if(command[0].equalsIgnoreCase("add"))
 					cmd =  Command.ADD;
-				if(command[0].equalsIgnoreCase("list"))
+				if(command[0].equalsIgnoreCase("list all"))
 					cmd = Command.LIST;
 				if(command[0].equalsIgnoreCase("lookup"))
 					cmd = Command.LOOKUP;
@@ -58,11 +61,11 @@ public class Server extends Thread{
 				case WRONG:
 					break;
 				case ADD:
-					hostname = in.readUTF();
-					portNumber = in.readInt();
+					hostname = in.readLine();
+					portNumber = Integer.parseInt(in.readLine());
 					activePeers.put(hostname, portNumber);
 					RFCNum = Integer.parseInt(command[2]);
-					title = in.readUTF();
+					title = in.readLine();
 
 					if(peerMap.containsKey(RFCNum)){
 						data = peerMap.get(RFCNum);
@@ -72,48 +75,55 @@ public class Server extends Thread{
 						data.peers = new ArrayList<String>();
 						data.peers.add(hostname);
 						data.title = title;
+						peerMap.put(RFCNum, data);
 					}
-					
-					//TODO :: output pending
-					out.writeUTF("RFC " + RFCNum + " " + title + " " + hostname + " " + portNumber);
+					System.out.println("SERVER :: After add : count = " + peerMap.size());
+					// sending output to client
+					out.writeBytes("RFC " + RFCNum + " " + title + " " + hostname + " " + portNumber+"\n");
 					
 					break;
 				case LOOKUP:
-					hostname = in.readUTF();
-					portNumber = Integer.parseInt(in.readUTF());
+					hostname = in.readLine();
+					portNumber = Integer.parseInt(in.readLine());
 					RFCNum = Integer.parseInt(command[2]);
-					title = in.readUTF();
+					title = in.readLine();
 
 					if(peerMap.containsKey(RFCNum)){
 						data = peerMap.get(RFCNum);
 						List<String> peerlist = data.peers;
+						System.out.println("SERVER :: sending count = " + peerlist.size());
+						out.writeBytes(peerlist.size()+ "\n");
 						for(String peer : peerlist){
 							portNumber = activePeers.get(peer);
-							out.writeUTF("RFC " + RFCNum + " " + title + " " + peer + " " + portNumber);
+							out.writeBytes("RFC " + RFCNum + " " + title + " " + peer + " " + portNumber + "\n");
 						}
 					}else{
-						out.writeUTF("Sorry! Currently none of the active peers have RFC "+ RFCNum);
+						out.writeBytes("0"+ "\n");
 					}
 					break;
 				case LIST:
 					Iterator<Map.Entry<Integer, RFCData>> it = peerMap.entrySet().iterator();
+					out.writeBytes(peerMap.size()+ "\n");
 					while(it.hasNext()){
 						Map.Entry<Integer, RFCData> entry = it.next();
 						RFCNum = entry.getKey();
 						data = entry.getValue();
 						List<String> peerlist = data.peers;
+						out.writeBytes(peerlist.size()+ "\n");
 						for(String peer : peerlist){
 							portNumber = activePeers.get(peer);
-							out.writeUTF("RFC " + RFCNum + " " + data.title + " " + peer + " " + portNumber);
+							out.writeBytes("RFC " + RFCNum + " " + data.title + " " + peer + " " + portNumber + "\n");
 						}
 					}
 					break;
 					//TODO :: case close:
 				}
 
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			
 		}
 	}
 
