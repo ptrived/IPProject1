@@ -82,8 +82,13 @@ public class ClientCommunication implements Runnable{
 					if(Server.peerMap.containsKey(RFCNum)){
 						data = Server.peerMap.get(RFCNum);
 						List<String> peerlist = data.peers;
-						System.out.println("SERVER :: sending count = " + peerlist.size());
+						//System.out.println("SERVER :: sending count = " + peerlist.size());
 						out.writeBytes(peerlist.size()+ "\n");
+						statusNum=200;				
+						output = sysName+" "+statusNum+" "+Status.statusMap.get(statusNum)+"\n";
+						//output.concat(" "+statusNum+" "+Status.statusMap.get(statusNum)+"\n");
+						//System.out.println(output);
+						out.writeBytes(output);
 						for(String peer : peerlist){
 							portNumber = Server.activePeers.get(peer);
 							out.writeBytes("RFC " + RFCNum + " " + title + " " + peer + " " + portNumber + "\n");
@@ -93,6 +98,8 @@ public class ClientCommunication implements Runnable{
 					}
 					break;
 				case LIST:
+					hostname = in.readLine();
+					portNumber = Integer.parseInt(in.readLine());
 					Iterator<Map.Entry<Integer, RFCData>> it = Server.peerMap.entrySet().iterator();
 					out.writeBytes(Server.peerMap.size()+ "\n");
 					while(it.hasNext()){
@@ -101,6 +108,11 @@ public class ClientCommunication implements Runnable{
 						data = entry.getValue();
 						List<String> peerlist = data.peers;
 						out.writeBytes(peerlist.size()+ "\n");
+						statusNum=200;				
+						output = sysName+" "+statusNum+" "+Status.statusMap.get(statusNum)+"\n";
+						//output.concat(" "+statusNum+" "+Status.statusMap.get(statusNum)+"\n");
+						//System.out.println(output);
+						out.writeBytes(output);
 						for(String peer : peerlist){
 							portNumber = Server.activePeers.get(peer);
 							out.writeBytes("RFC " + RFCNum + " " + data.title + " " + peer + " " + portNumber + "\n");
@@ -112,9 +124,14 @@ public class ClientCommunication implements Runnable{
 
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}finally{
-
+			try {
+				socket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	
 		
