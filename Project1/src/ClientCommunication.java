@@ -19,12 +19,11 @@ public class ClientCommunication implements Runnable{
 	public void run() {
 
 		try {
+			System.out.println("Client Connected");
+			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+			
 			while(true){
-				System.out.println("Client Connected");
-				ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-				ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-				
-
 				int portNumber, RFCNum;
 				RFCData data;
 
@@ -32,10 +31,10 @@ public class ClientCommunication implements Runnable{
 				NormalResponse response = new NormalResponse();
 				List<String> outputList = new ArrayList<String>();
 
-				//try {
-				while((request = (NormalRequest) in.readObject())!=null){
+				
+				//while((request = (NormalRequest) in.readObject())!=null){
 
-					//}
+				request = (NormalRequest) in.readObject();
 
 					String command[] = request.command.split(" ");
 					switch(request.cmd){
@@ -112,7 +111,8 @@ public class ClientCommunication implements Runnable{
 						break;
 						//TODO :: case close:
 					}
-				}
+					//request = null;
+				//}
 			}
 
 		} catch (ClassNotFoundException e) {
