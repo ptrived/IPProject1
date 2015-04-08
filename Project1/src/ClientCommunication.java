@@ -21,8 +21,9 @@ public class ClientCommunication implements Runnable{
 		try {
 			while(true){
 				System.out.println("Client Connected");
-				ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 				ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+				ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+				
 
 				int portNumber, RFCNum;
 				RFCData data;

@@ -18,6 +18,8 @@ public class Client extends Thread{
 			System.out.println("Client Connected");
 			ObjectInputStream in = new ObjectInputStream(client.getInputStream());
 			ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
+			
+			
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			String hostname = null, title;
 			int portNum = 0;
