@@ -1,15 +1,8 @@
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +24,9 @@ public class Server{
 		try {
 			myService = new ServerSocket(portNum);
 		} catch (SocketException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		} catch (IOException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	public static void main(String args[]){
@@ -46,7 +39,7 @@ public class Server{
 				t.start();
 			}
 			
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
