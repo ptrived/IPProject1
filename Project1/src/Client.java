@@ -13,6 +13,13 @@ public class Client extends Thread{
 
 	public static Command parseCommand(String command){
 		String[] cmdArray = command.split(" ");
+		int size = cmdArray.length;
+		if(size<3){
+			return Command.WRONG;
+		}
+//		if(cmdArray[size-1]!="P2P-CI/1.0"){
+//			return Command.WRONG;
+//		}
 		if(cmdArray[0].equalsIgnoreCase("add"))
 			return Command.ADD;
 		if(cmdArray[0].equalsIgnoreCase("list"))
@@ -36,18 +43,8 @@ public class Client extends Thread{
 			while(true){
 				System.out.println("Enter the command:");
 				String command = br.readLine();
-				Command cmd = Command.WRONG;
-				String[] cmdArray = command.split(" ");
-
-				if(cmdArray[0].equalsIgnoreCase("add"))
-					cmd =  Command.ADD;
-				if(cmdArray[0].equalsIgnoreCase("list all"))
-					cmd = Command.LIST;
-				if(cmdArray[0].equalsIgnoreCase("lookup"))
-					cmd = Command.LOOKUP;
+				Command cmd = parseCommand(command);
 				String hostname, title, portNum;
-				//int portNum;
-				
 				switch(cmd){
 				case WRONG:
 					continue;
@@ -62,6 +59,7 @@ public class Client extends Thread{
 					System.out.print("Title : ");
 					title = br.readLine();
 					out.writeBytes(title+"\n");
+					System.out.println(in.readLine());
 					System.out.println(in.readLine());
 					break;
 				case LIST:
