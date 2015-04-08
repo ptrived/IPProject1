@@ -17,9 +17,9 @@ public class Client extends Thread{
 		if(size<3){
 			return Command.WRONG;
 		}
-//		if(cmdArray[size-1]!="P2P-CI/1.0"){
-//			return Command.WRONG;
-//		}
+		//		if(cmdArray[size-1]!="P2P-CI/1.0"){
+		//			return Command.WRONG;
+		//		}
 		if(cmdArray[0].equalsIgnoreCase("add"))
 			return Command.ADD;
 		if(cmdArray[0].equalsIgnoreCase("list"))
@@ -33,13 +33,13 @@ public class Client extends Thread{
 		Socket client;
 		try{
 			client = new Socket("localhost", portNum);
-			
+
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			OutputStream outToServer = client.getOutputStream();
 			DataOutputStream out  = new DataOutputStream(outToServer);
 			//DataInputStream in = new DataInputStream(client.getInputStream());
 			BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-			
+
 			while(true){
 				System.out.println("Enter the command:");
 				String command = br.readLine();
@@ -61,23 +61,6 @@ public class Client extends Thread{
 					out.writeBytes(title+"\n");
 					System.out.println(in.readLine());
 					System.out.println(in.readLine());
-					break;
-				case LIST:
-					out.writeBytes(command + "\n");
-					System.out.print("Host : ");
-					hostname = br.readLine();
-					out.writeBytes(hostname + "\n");
-					System.out.print("Port : ");
-					portNum = br.readLine();
-					out.writeBytes(portNum + "\n");
-					//read and print output from server
-					int listSize , mapSize = Integer.parseInt(in.readLine());
-					for(int i = 0; i < mapSize; i++){
-						listSize = Integer.parseInt(in.readLine());
-						for(int j = 0; j < listSize; j++){
-							System.out.println(in.readLine());
-						}
-					}
 					break;
 				case LOOKUP:
 					out.writeBytes(command + "\n");
@@ -102,9 +85,26 @@ public class Client extends Thread{
 						}
 					}
 					break;
-				}
-				
-				
+				case LIST:
+					out.writeBytes(command + "\n");
+					System.out.print("Host : ");
+					hostname = br.readLine();
+					out.writeBytes(hostname + "\n");
+					System.out.print("Port : ");
+					portNum = br.readLine();
+					out.writeBytes(portNum + "\n");
+					//read and print output from server
+					int listSize , mapSize = Integer.parseInt(in.readLine());
+					for(int i = 0; i < mapSize; i++){
+						listSize = Integer.parseInt(in.readLine());
+						System.out.println(in.readLine());
+						for(int j = 0; j < listSize; j++){
+							System.out.println(in.readLine());
+						}
+					}
+					break;
+
+				}				
 			}
 		}catch(Exception e){
 			e.printStackTrace();
