@@ -1,5 +1,7 @@
+import java.io.Serializable;
 
-public class GETRequest {
+
+public class GETRequest implements Serializable{
 	String command;
 	String host;
 	String OS;
