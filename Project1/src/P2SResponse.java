@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class NormalResponse implements Serializable{
+public class P2SResponse implements Serializable{
 	String version;
 	int statusCode;
 	String phrase;

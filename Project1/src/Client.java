@@ -25,11 +25,11 @@ public class Client extends Thread{
 			int portNum = 0;
 			System.out.println("Streams created");
 			while(true){
-				NormalRequest request;
-				NormalResponse response;
+				P2SRequest request;
+				P2SResponse response;
 				System.out.println("Enter the command:");
 				String command = br.readLine();
-				Command cmd = NormalRequest.parseCommand(command);		
+				Command cmd = P2SRequest.parseCommand(command);		
 				
 				if(cmd != Command.WRONG){
 					System.out.print("Host : ");
@@ -44,25 +44,25 @@ public class Client extends Thread{
 				case ADD:
 					System.out.print("Title : ");
 					title = br.readLine();
-					request = new NormalRequest(command, hostname, portNum, title);
+					request = new P2SRequest(command, hostname, portNum, title);
 					out.writeObject(request);
-					//TODO :: response
+					
 					break;
 				case LOOKUP:
 					System.out.print("Title : ");
 					title = br.readLine();
-					request = new NormalRequest(command, hostname, portNum, title);
+					request = new P2SRequest(command, hostname, portNum, title);
 					out.writeObject(request);
-					//TODO :: response
+					
 					break;
 				case LIST:
-					request = new NormalRequest(command, hostname, portNum, "");
+					request = new P2SRequest(command, hostname, portNum, "");
 					out.writeObject(request);
-					//TODO :: response
+					
 					break;
 
 				}	
-				response = (NormalResponse) in.readObject();
+				response = (P2SResponse) in.readObject();
 				System.out.println(response.version+" "+response.statusCode+" "+response.phrase);
 				int listSize = response.responseList.size();
 				if(listSize > 0 && response.statusCode==200){

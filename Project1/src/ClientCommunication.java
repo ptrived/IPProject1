@@ -27,14 +27,14 @@ public class ClientCommunication implements Runnable{
 				int portNumber, RFCNum;
 				RFCData data;
 
-				NormalRequest request;
-				NormalResponse response = new NormalResponse();
+				P2SRequest request;
+				P2SResponse response = new P2SResponse();
 				List<String> outputList = new ArrayList<String>();
 
 				
 				//while((request = (NormalRequest) in.readObject())!=null){
 
-				request = (NormalRequest) in.readObject();
+				request = (P2SRequest) in.readObject();
 
 					String command[] = request.command.split(" ");
 					switch(request.cmd){

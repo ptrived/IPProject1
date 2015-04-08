@@ -1,14 +1,14 @@
 import java.io.Serializable;
 
 
-public class NormalRequest implements Serializable{
+public class P2SRequest implements Serializable{
 	String command;
 	String hostname;
 	int portNum;
 	String title;
 	Command cmd;
 	
-	public NormalRequest(String command, String hostname, int port, String title){
+	public P2SRequest(String command, String hostname, int port, String title){
 		this.command = command;
 		this.hostname = hostname;
 		this.portNum = port;
