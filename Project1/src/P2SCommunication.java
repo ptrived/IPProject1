@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ClientCommunication implements Runnable{
+public class P2SCommunication implements Runnable{
 	Socket socket = null;
 	String sysName = "P2P-CI/1.0";
-	public ClientCommunication(Socket socket){
+	public P2SCommunication(Socket socket){
 		this.socket = socket;
 	}
 

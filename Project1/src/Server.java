@@ -34,7 +34,7 @@ public class Server{
 		try {
 			while(true){
 				Socket serverSocket = myService.accept();
-				ClientCommunication clientThread = new ClientCommunication(serverSocket);
+				P2SCommunication clientThread = new P2SCommunication(serverSocket);
 				Thread t = new Thread(clientThread);
 				t.start();
 			}
