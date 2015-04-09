@@ -110,6 +110,8 @@ public class P2SCommunication implements Runnable{
 					out.writeObject(response);
 					break;
 					//TODO :: case close:
+				default:
+					break;
 				}
 			}
 

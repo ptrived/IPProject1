@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+@SuppressWarnings("serial")
 public class P2SResponse implements Serializable{
 	String version;
 	int statusCode;
