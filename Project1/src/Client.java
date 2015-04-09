@@ -27,20 +27,17 @@ public class Client {
 			System.exit(0);
 		}
 	}
-	
 
 	public static void main(String[] args) {		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Enter Server address");
-			
+
 		try{
 			String serverAddr = br.readLine();	
 			client = new Socket(serverAddr, portNum);
 			System.out.println("Connected to server");
 			ObjectInputStream in = new ObjectInputStream(client.getInputStream());
 			ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
-			
-			
 			String hostname = null, title;
 			int portNum = 0;
 			System.out.println("Streams created");
@@ -50,18 +47,18 @@ public class Client {
 				System.out.println("Enter the command:");
 				String command = br.readLine();
 				Command cmd = P2SRequest.parseCommand(command);		
-				
+
 				if(cmd != Command.WRONG && cmd != Command.GET){
 					System.out.print("Host : ");
 					hostname = br.readLine();
 					System.out.print("Port : ");
 					portNum = Integer.parseInt(br.readLine());
 				}
-				
+
 				switch(cmd){
 				case WRONG:
 					continue;
-					
+
 				case ADD:
 					System.out.print("Title : ");
 					title = br.readLine();
@@ -70,7 +67,7 @@ public class Client {
 					response = (P2SResponse) in.readObject();
 					printP2SResponse(response);
 					break;
-					
+
 				case LOOKUP:
 					System.out.print("Title : ");
 					title = br.readLine();
@@ -79,14 +76,14 @@ public class Client {
 					response = (P2SResponse) in.readObject();
 					printP2SResponse(response);
 					break;
-					
+
 				case LIST:
 					request = new P2SRequest(command, hostname, portNum, "");
 					out.writeObject(request);
 					response = (P2SResponse) in.readObject();
 					printP2SResponse(response);
 					break;
-					
+
 				case GET:
 					System.out.println("Host : ");
 					hostname = br.readLine();
@@ -112,15 +109,6 @@ public class Client {
 					}
 					break;
 				}	
-//				response = (P2SResponse) in.readObject();
-//				System.out.println(response.version+" "+response.statusCode+" "+response.phrase);
-//				int listSize = response.responseList.size();
-//				if(listSize > 0 && response.statusCode==200){
-//					for (String str : response.responseList) {
-//						System.out.println(str);
-//					}					
-//				}
-			
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -129,14 +117,19 @@ public class Client {
 			try {
 				client.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
 	private static void printP2PResponse(P2PResponse p2pResp) {
-		System.out.println(p2pResp.getContentLength() + " " + p2pResp.getOS() + " " + p2pResp.getVersion() + " " + p2pResp.getDate().toString());
-		
+		System.out.println(p2pResp.version+" "+p2pResp.statusCode+" "+Status.statusMap.get(p2pResp.statusCode));
+		System.out.println(p2pResp.getDate());
+		System.out.println(p2pResp.getOS());
+		System.out.println(p2pResp.getLastModified());
+		System.out.println(p2pResp.getContentLength());
+		System.out.println(p2pResp.getContentType());
+
+
 	}
 	public static void printP2SResponse(P2SResponse response){
 		System.out.println(response.version+" "+response.statusCode+" "+response.phrase);

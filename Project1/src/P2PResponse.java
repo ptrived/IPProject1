@@ -3,7 +3,14 @@ import java.util.Date;
 
 @SuppressWarnings("serial")
 public class P2PResponse implements Serializable{
+	
+	Date date;
+	String OS;
+	Date lastModified;
+	long contentLength;
+	String contentType;
 	String version;
+	int statusCode;
 	public String getVersion() {
 		return version;
 	}
@@ -40,9 +47,4 @@ public class P2PResponse implements Serializable{
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
 	}
-	Date date;
-	String OS;
-	Date lastModified;
-	long contentLength;
-	String contentType;
 }
