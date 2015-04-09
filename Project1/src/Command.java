@@ -1,4 +1,4 @@
 
 public enum Command {
-	  ADD, LIST, LOOKUP, WRONG
+	  ADD, LIST, LOOKUP, GET, WRONG
 }

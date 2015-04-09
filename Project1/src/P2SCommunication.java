@@ -22,7 +22,7 @@ public class P2SCommunication implements Runnable{
 			System.out.println("Client Connected");
 			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-			
+
 			while(true){
 				int portNumber, RFCNum;
 				RFCData data;
@@ -31,103 +31,99 @@ public class P2SCommunication implements Runnable{
 				P2SResponse response = new P2SResponse();
 				List<String> outputList = new ArrayList<String>();
 
-				
+
 				//while((request = (NormalRequest) in.readObject())!=null){
 
 				request = (P2SRequest) in.readObject();
 
-					String command[] = request.command.split(" ");
-					switch(request.cmd){
-					case WRONG:
-						break;
-					case ADD:
-						Server.activePeers.put(request.hostname, request.portNum);
-						RFCNum = Integer.parseInt(command[2]);
+				String command[] = request.command.split(" ");
+				switch(request.cmd){
+				case WRONG:
+					break;
+				case ADD:
+					Server.activePeers.put(request.hostname, request.portNum);
+					RFCNum = Integer.parseInt(command[2]);
 
-						if(Server.peerMap.containsKey(RFCNum)){
-							data = Server.peerMap.get(RFCNum);
-							data.peers.add(request.hostname);
-						}else{
-							data = new RFCData();
-							data.peers = new ArrayList<String>();
-							data.peers.add(request.hostname);
-							data.title = request.title;
-							Server.peerMap.put(RFCNum, data);
+					if(Server.peerMap.containsKey(RFCNum)){
+						data = Server.peerMap.get(RFCNum);
+						data.peers.add(request.hostname);
+					}else{
+						data = new RFCData();
+						data.peers = new ArrayList<String>();
+						data.peers.add(request.hostname);
+						data.title = request.title;
+						Server.peerMap.put(RFCNum, data);
+					}
+
+					response.setStatusCode(200);
+					response.setVersion(sysName);
+					response.setPhrase(Status.statusMap.get(200));
+					outputList.add("RFC " + RFCNum + " " + request.title + " " + request.hostname + " " + request.portNum);
+					response.setResponseList(outputList);
+					out.writeObject(response);
+					break;
+				case LOOKUP:
+					RFCNum = Integer.parseInt(command[2]);
+					if(Server.peerMap.containsKey(RFCNum)){
+						data = Server.peerMap.get(RFCNum);
+						List<String> peerlist = data.peers;				
+						for(String peer : peerlist){
+							portNumber = Server.activePeers.get(peer);
+							outputList.add("RFC " + RFCNum + " " + request.title + " " + peer + " " + portNumber);
 						}
-
 						response.setStatusCode(200);
 						response.setVersion(sysName);
 						response.setPhrase(Status.statusMap.get(200));
-						outputList.add("RFC " + RFCNum + " " + request.title + " " + request.hostname + " " + request.portNum);
 						response.setResponseList(outputList);
-						out.writeObject(response);
-						break;
-					case LOOKUP:
-						RFCNum = Integer.parseInt(command[2]);
-						if(Server.peerMap.containsKey(RFCNum)){
-							data = Server.peerMap.get(RFCNum);
-							List<String> peerlist = data.peers;				
+					}else{
+						response.setStatusCode(404);
+						response.setVersion(sysName);
+						response.setPhrase(Status.statusMap.get(404));
+						response.setResponseList(outputList);
+					}
+					out.writeObject(response);
+					break;
+				case LIST:
+					Iterator<Map.Entry<Integer, RFCData>> it = Server.peerMap.entrySet().iterator();
+					if(Server.peerMap.size()==0){
+						response.setStatusCode(404);
+						response.setVersion(sysName);
+						response.setPhrase(Status.statusMap.get(404));
+						response.setResponseList(outputList);
+					}else{
+						while(it.hasNext()){
+							Map.Entry<Integer, RFCData> entry = it.next();
+							RFCNum = entry.getKey();
+							data = entry.getValue();
+							List<String> peerlist = data.peers;
+
 							for(String peer : peerlist){
 								portNumber = Server.activePeers.get(peer);
 								outputList.add("RFC " + RFCNum + " " + request.title + " " + peer + " " + portNumber);
 							}
-							response.setStatusCode(200);
-							response.setVersion(sysName);
-							response.setPhrase(Status.statusMap.get(200));
-							response.setResponseList(outputList);
-						}else{
-							response.setStatusCode(404);
-							response.setVersion(sysName);
-							response.setPhrase(Status.statusMap.get(404));
-							response.setResponseList(outputList);
 						}
-						out.writeObject(response);
-						break;
-					case LIST:
-						Iterator<Map.Entry<Integer, RFCData>> it = Server.peerMap.entrySet().iterator();
-						if(Server.peerMap.size()==0){
-							response.setStatusCode(404);
-							response.setVersion(sysName);
-							response.setPhrase(Status.statusMap.get(404));
-							response.setResponseList(outputList);
-						}else{
-							while(it.hasNext()){
-								Map.Entry<Integer, RFCData> entry = it.next();
-								RFCNum = entry.getKey();
-								data = entry.getValue();
-								List<String> peerlist = data.peers;
-
-								for(String peer : peerlist){
-									portNumber = Server.activePeers.get(peer);
-									outputList.add("RFC " + RFCNum + " " + request.title + " " + peer + " " + portNumber);
-								}
-							}
-							response.setStatusCode(200);
-							response.setVersion(sysName);
-							response.setPhrase(Status.statusMap.get(200));
-							response.setResponseList(outputList);
-						}
-						out.writeObject(response);
-						break;
-						//TODO :: case close:
+						response.setStatusCode(200);
+						response.setVersion(sysName);
+						response.setPhrase(Status.statusMap.get(200));
+						response.setResponseList(outputList);
 					}
-					//request = null;
-				//}
+					out.writeObject(response);
+					break;
+					//TODO :: case close:
+				}
 			}
 
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}finally{
-			//			try {
-			//				socket.close();
-			//			} catch (IOException e) {
-			//				// TODO Auto-generated catch block
-			//				e.printStackTrace();
-			//			}
+			try {
+				socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 

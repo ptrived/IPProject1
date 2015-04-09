@@ -31,6 +31,8 @@ public class P2SRequest implements Serializable{
 			return Command.LIST;
 		if(cmdArray[0].equalsIgnoreCase("lookup"))
 			return Command.LOOKUP;
+		if(cmdArray[0].equalsIgnoreCase("get"))
+			return Command.GET;
 		return Command.WRONG;
 	}
 }	
