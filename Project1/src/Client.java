@@ -93,7 +93,7 @@ public class Client {
 					p2pReq.setCommand(command);
 					p2pReq.setCommand(hostname);
 					p2pReq.setOS(OS);
-					if(Server.activePeers.containsKey(hostname)){
+					if(Server.getActivePeers().containsKey(hostname)){
 						portNum = Server.activePeers.get(hostname);
 						Socket peerSocket = new Socket(hostname, portNum);
 						System.out.println("Peer Connected");
