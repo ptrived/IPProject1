@@ -14,21 +14,49 @@ class RFCData{
 public class Server{
 	static final int portNum = 7734;
 	String sysName = "P2P-CI/1.0";
-	public static ServerSocket myService = null ;
-	public static Map<String, Integer> activePeers;
-	public static Map<String, Integer> getActivePeers() {
-		return activePeers;
-	}
-	public static Map<Integer, RFCData> peerMap;
-	
-	public static Map<Integer, RFCData> getPeerMap() {
-		return peerMap;
-	}
+	private static ServerSocket myService = null ;
+	private  Map<String, Integer> activePeers;	
+	private  Map<Integer, RFCData> peerMap;
+	private static Server server;
+
 	static{
-		activePeers = new HashMap<String, Integer>();
-		peerMap = new HashMap<Integer, RFCData>();
+//		server.activePeers = new HashMap<String, Integer>();
+//		server.peerMap = new HashMap<Integer, RFCData>();		
+	}
+	
+	public  void setActivePeers(Map<String, Integer> activePeers) {
+		synchronized (this.activePeers) {
+			this.activePeers = activePeers;
+		}		
+	}
+	
+	public  void setPeerMap(Map<Integer, RFCData> peerMap) {
+		this.peerMap = peerMap;
+	}
+	
+	public  Map<Integer, RFCData> getPeerMap() {
+		return this.peerMap;
+	}
+	
+	public  Map<String, Integer> getActivePeers() {
+		synchronized (this.activePeers) {
+			return this.activePeers;
+		}
+	}
+	
+	private Server(){
+	}
+	
+	public static Server getInstance(){
+		if(server == null){
+			server = new Server();
+			server.activePeers = new HashMap<String, Integer>();
+			server.peerMap = new HashMap<Integer, RFCData>();	
+		}
+			return server;
 		
 	}
+	
 	public static void main(String args[]){
 		try {
 			myService = new ServerSocket(portNum);
@@ -47,7 +75,6 @@ public class Server{
 			}
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

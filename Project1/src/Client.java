@@ -12,10 +12,13 @@ public class Client {
 	static Socket client = null;
 	static final int portNum = 7734;
 	static int clientPortNum;
+	static String clientHostName;
 	static ServerSocket clientService = null ;
 	static{
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			System.out.println("Enter your hostname : ");
+			clientHostName = br.readLine();
 			System.out.println("Enter the upload port number : ");
 			clientPortNum = Integer.parseInt(br.readLine());
 			clientService = new ServerSocket(clientPortNum);
@@ -48,37 +51,45 @@ public class Client {
 				String command = br.readLine();
 				Command cmd = P2SRequest.parseCommand(command);		
 
-				if(cmd != Command.WRONG && cmd != Command.GET){
+				/*if(cmd != Command.WRONG && cmd != Command.GET){
 					System.out.print("Host : ");
 					hostname = br.readLine();
 					System.out.print("Port : ");
 					portNum = Integer.parseInt(br.readLine());
-				}
+				}*/
 
 				switch(cmd){
 				case WRONG:
 					continue;
 
 				case ADD:
+
 					System.out.print("Title : ");
 					title = br.readLine();
-					request = new P2SRequest(command, hostname, portNum, title);
+					//					request = new P2SRequest(command, hostname, portNum, title);
+					System.out.println("active peers size : " + Server.getInstance().getActivePeers().size());
+					request = new P2SRequest(command, clientHostName, clientPortNum, title);
 					out.writeObject(request);
 					response = (P2SResponse) in.readObject();
 					printP2SResponse(response);
 					break;
 
 				case LOOKUP:
+
 					System.out.print("Title : ");
 					title = br.readLine();
-					request = new P2SRequest(command, hostname, portNum, title);
+					//request = new P2SRequest(command, hostname, portNum, title);
+					System.out.println("active peers size : " + Server.getInstance().getActivePeers().size());
+					request = new P2SRequest(command, clientHostName, clientPortNum, title);
 					out.writeObject(request);
 					response = (P2SResponse) in.readObject();
 					printP2SResponse(response);
 					break;
 
 				case LIST:
-					request = new P2SRequest(command, hostname, portNum, "");
+					//request = new P2SRequest(command, hostname, portNum, "");
+					System.out.println("active peers size : " + Server.getInstance().getActivePeers().size());
+					request = new P2SRequest(command, clientHostName, clientPortNum, "");
 					out.writeObject(request);
 					response = (P2SResponse) in.readObject();
 					printP2SResponse(response);
@@ -89,14 +100,16 @@ public class Client {
 					hostname = br.readLine();
 					System.out.print("OS : ");
 					String OS  = br.readLine();
+					System.out.print("Port : ");
+					portNum  = Integer.parseInt(br.readLine());
 					P2PRequest p2pReq = new P2PRequest();
 					p2pReq.setCommand(command);
-					p2pReq.setCommand(hostname);
+					p2pReq.setHost(clientHostName);
 					p2pReq.setOS(OS);
-					if(Server.getActivePeers().containsKey(hostname)){
-						portNum = Server.activePeers.get(hostname);
+					
+					try{
 						Socket peerSocket = new Socket(hostname, portNum);
-						System.out.println("Peer Connected");
+						System.out.println("Peer Connected"); 
 						ObjectInputStream inPeer = new ObjectInputStream(peerSocket.getInputStream());
 						ObjectOutputStream outPeer = new ObjectOutputStream(peerSocket.getOutputStream());
 						outPeer.writeObject(p2pReq);
@@ -104,8 +117,9 @@ public class Client {
 						printP2PResponse(p2pResp);
 						peerSocket.close();
 					}
-					else{
-						System.out.println("Bad Request");
+					catch(Exception e){
+						//System.out.println("Bad Request :" + e);
+						e.printStackTrace();
 					}
 					break;
 				}	
@@ -114,11 +128,11 @@ public class Client {
 			e.printStackTrace();
 		}
 		finally{
-			try {
-				client.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			//			try {
+			//				client.close();
+			//			} catch (IOException e) {
+			//				e.printStackTrace();
+			//			}
 		}
 	}
 	private static void printP2PResponse(P2PResponse p2pResp) {

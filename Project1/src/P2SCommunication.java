@@ -32,8 +32,6 @@ public class P2SCommunication implements Runnable{
 				List<String> outputList = new ArrayList<String>();
 
 
-				//while((request = (NormalRequest) in.readObject())!=null){
-
 				request = (P2SRequest) in.readObject();
 
 				String command[] = request.command.split(" ");
@@ -41,18 +39,19 @@ public class P2SCommunication implements Runnable{
 				case WRONG:
 					break;
 				case ADD:
-					Server.activePeers.put(request.hostname, request.portNum);
+					System.out.println("SERVER: Receieved add req : current map size : "+ Server.getInstance().getActivePeers().size());
+					Server.getInstance().getActivePeers().put(request.hostname, request.portNum);
 					RFCNum = Integer.parseInt(command[2]);
 
-					if(Server.peerMap.containsKey(RFCNum)){
-						data = Server.peerMap.get(RFCNum);
+					if(Server.getInstance().getPeerMap().containsKey(RFCNum)){
+						data = Server.getInstance().getPeerMap().get(RFCNum);
 						data.peers.add(request.hostname);
 					}else{
 						data = new RFCData();
 						data.peers = new ArrayList<String>();
 						data.peers.add(request.hostname);
 						data.title = request.title;
-						Server.peerMap.put(RFCNum, data);
+						Server.getInstance().getPeerMap().put(RFCNum, data);
 					}
 
 					response.setStatusCode(200);
@@ -60,15 +59,17 @@ public class P2SCommunication implements Runnable{
 					response.setPhrase(Status.statusMap.get(200));
 					outputList.add("RFC " + RFCNum + " " + request.title + " " + request.hostname + " " + request.portNum);
 					response.setResponseList(outputList);
+					
+					System.out.println("SERVER: Processed add req : current map size : "+ Server.getInstance().getActivePeers().size());
 					out.writeObject(response);
 					break;
 				case LOOKUP:
 					RFCNum = Integer.parseInt(command[2]);
-					if(Server.peerMap.containsKey(RFCNum)){
-						data = Server.peerMap.get(RFCNum);
+					if(Server.getInstance().getPeerMap().containsKey(RFCNum)){
+						data = Server.getInstance().getPeerMap().get(RFCNum);
 						List<String> peerlist = data.peers;				
 						for(String peer : peerlist){
-							portNumber = Server.activePeers.get(peer);
+							portNumber = Server.getInstance().getActivePeers().get(peer);
 							outputList.add("RFC " + RFCNum + " " + request.title + " " + peer + " " + portNumber);
 						}
 						response.setStatusCode(200);
@@ -84,8 +85,8 @@ public class P2SCommunication implements Runnable{
 					out.writeObject(response);
 					break;
 				case LIST:
-					Iterator<Map.Entry<Integer, RFCData>> it = Server.peerMap.entrySet().iterator();
-					if(Server.peerMap.size()==0){
+					Iterator<Map.Entry<Integer, RFCData>> it = Server.getInstance().getPeerMap().entrySet().iterator();
+					if(Server.getInstance().getPeerMap().size()==0){
 						response.setStatusCode(404);
 						response.setVersion(sysName);
 						response.setPhrase(Status.statusMap.get(404));
@@ -98,7 +99,7 @@ public class P2SCommunication implements Runnable{
 							List<String> peerlist = data.peers;
 
 							for(String peer : peerlist){
-								portNumber = Server.activePeers.get(peer);
+								portNumber = Server.getInstance().getActivePeers().get(peer);
 								outputList.add("RFC " + RFCNum + " " + request.title + " " + peer + " " + portNumber);
 							}
 						}
