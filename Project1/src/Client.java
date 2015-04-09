@@ -31,14 +31,17 @@ public class Client {
 
 	public static void main(String[] args) {
 		System.out.println("Client Started");
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("Enter Server address");
+			
 		try{
-			client = new Socket("localhost", portNum);
+			String serverAddr = br.readLine();	
+			client = new Socket(serverAddr, portNum);
 			System.out.println("Client Connected");
 			ObjectInputStream in = new ObjectInputStream(client.getInputStream());
 			ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
 			
 			
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			String hostname = null, title;
 			int portNum = 0;
 			System.out.println("Streams created");
