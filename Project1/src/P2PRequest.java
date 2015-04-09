@@ -1,6 +1,7 @@
 import java.io.Serializable;
 
 
+@SuppressWarnings("serial")
 public class P2PRequest implements Serializable{
 	String command;
 	public String getCommand() {

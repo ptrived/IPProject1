@@ -1,6 +1,7 @@
 import java.io.Serializable;
 
 
+@SuppressWarnings("serial")
 public class P2SRequest implements Serializable{
 	String command;
 	String hostname;
