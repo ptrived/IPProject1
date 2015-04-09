@@ -16,11 +16,20 @@ public class Server{
 	String sysName = "P2P-CI/1.0";
 	public static ServerSocket myService = null ;
 	public static Map<String, Integer> activePeers;
+	public static Map<String, Integer> getActivePeers() {
+		return activePeers;
+	}
 	public static Map<Integer, RFCData> peerMap;
 	
+	public static Map<Integer, RFCData> getPeerMap() {
+		return peerMap;
+	}
 	static{
 		activePeers = new HashMap<String, Integer>();
 		peerMap = new HashMap<Integer, RFCData>();
+		
+	}
+	public static void main(String args[]){
 		try {
 			myService = new ServerSocket(portNum);
 		} catch (SocketException e) {
@@ -28,8 +37,6 @@ public class Server{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	public static void main(String args[]){
 		System.out.println("P2P-CI/1.0 system is up");
 		try {
 			while(true){
