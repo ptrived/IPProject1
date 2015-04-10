@@ -140,6 +140,7 @@ public class Client {
 		System.out.println("Last-Modified : "+p2pResp.getLastModified());
 		System.out.println("Content-Length : "+p2pResp.getContentLength());
 		System.out.println("Content-Type : "+p2pResp.getContentType());
+		System.out.println(p2pResp.getData());
 	}
 	private static void printP2SResponse(P2SResponse response){
 		int listSize = response.responseList.size();

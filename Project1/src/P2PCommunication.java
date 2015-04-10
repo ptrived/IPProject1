@@ -1,6 +1,7 @@
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -43,9 +44,10 @@ public class P2PCommunication implements Runnable{
 				p2pResp.setOS(System.getProperty("os.name"));
 				p2pResp.setContentLength(file.getTotalSpace());
 				SimpleDateFormat date_format = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z");				
-			    p2pResp.setDate(date_format.format(new Date()));
+				p2pResp.setDate(date_format.format(new Date()));
 				p2pResp.setLastModified(date_format.format(file.lastModified()));
 				p2pResp.setContentType("text/plain");
+				p2pResp.setData(getContent(file));
 				p2pResp.setStatusCode(200);
 				out.writeObject(p2pResp);
 				inStream.close();
@@ -58,4 +60,17 @@ public class P2PCommunication implements Runnable{
 
 	}
 
+	private String getContent(File file) {		
+		String result = null;		   
+		try {
+			FileReader reader = new FileReader(file);
+			char[] c = new char[(int) file.length()];
+			reader.read(c);
+			result = new String(c);
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
