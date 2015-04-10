@@ -43,7 +43,7 @@ public class P2PCommunication implements Runnable{
 				outStream.flush();
 				p2pResp.setVersion(Status.sysName);				
 				p2pResp.setOS(System.getProperty("os.name"));
-				p2pResp.setContentLength(file.getTotalSpace());
+				p2pResp.setContentLength(file.length());
 				SimpleDateFormat date_format = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z");				
 				p2pResp.setDate(date_format.format(new Date()));
 				p2pResp.setLastModified(date_format.format(file.lastModified()));
@@ -68,7 +68,6 @@ public class P2PCommunication implements Runnable{
 		try {
 			scanner = new Scanner(file);
 			String lineSeparator = System.getProperty("line.separator");
-
 			while(scanner.hasNextLine()) {        
 				fileContents.append(scanner.nextLine() + lineSeparator);
 			}
