@@ -60,7 +60,6 @@ public class Server{
 				Thread t = new Thread(clientThread);
 				t.start();
 			}
-
 		} catch (SocketException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
