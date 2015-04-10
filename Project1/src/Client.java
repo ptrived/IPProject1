@@ -1,5 +1,8 @@
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -104,7 +107,7 @@ public class Client {
 					portNum  = Integer.parseInt(br.readLine());
 					P2PRequest p2pReq = new P2PRequest();
 					p2pReq.setCommand(command);
-					p2pReq.setHost(clientHostName);
+					p2pReq.setHost(hostname);
 					p2pReq.setOS(OS);
 					
 					try{
@@ -113,6 +116,19 @@ public class Client {
 						ObjectInputStream inPeer = new ObjectInputStream(peerSocket.getInputStream());
 						ObjectOutputStream outPeer = new ObjectOutputStream(peerSocket.getOutputStream());
 						outPeer.writeObject(p2pReq);
+						//File Transfer
+						String[] strArr = p2pReq.command.split(" ");
+						String fileName = strArr[2];
+						String filePath = "F:\\rfc\\"+fileName+".txt";
+					    byte[] b_arr = new byte[1024];
+					    InputStream inStream = peerSocket.getInputStream();
+					    FileOutputStream f = new FileOutputStream(filePath);
+					    BufferedOutputStream outStream = new BufferedOutputStream(f);
+					    int bytesRead = inStream.read(b_arr, 0, b_arr.length);
+					    outStream.write(b_arr, 0, bytesRead);
+					    outStream.close();
+					    //sock.close();
+						
 						P2PResponse p2pResp = (P2PResponse) inPeer.readObject();
 						printP2PResponse(p2pResp);
 						peerSocket.close();
