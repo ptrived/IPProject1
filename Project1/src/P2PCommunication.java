@@ -35,7 +35,7 @@ public class P2PCommunication implements Runnable{
 				String fileName = strArr[2];
 				String filePath = "F:\\rfc\\"+fileName+".txt";
 				File file = new File(filePath);
-				byte[] b_arr = new byte[(int) filePath.length()];
+				byte[] b_arr = new byte[(int) file.length()];
 				BufferedInputStream inStream = new BufferedInputStream(new FileInputStream(filePath));
 				inStream.read(b_arr, 0, b_arr.length);
 				OutputStream outStream = clientSocket.getOutputStream();
@@ -62,20 +62,19 @@ public class P2PCommunication implements Runnable{
 	}
 
 	private String getContent(File file) {
-
-		StringBuilder fileContents = new StringBuilder((int)file.length());
-		Scanner scanner = null;
+		StringBuilder result = new StringBuilder((int)file.length());
+		Scanner cin = null;
 		try {
-			scanner = new Scanner(file);
+			cin = new Scanner(file);
 			String lineSeparator = System.getProperty("line.separator");
-			while(scanner.hasNextLine()) {        
-				fileContents.append(scanner.nextLine() + lineSeparator);
+			while(cin.hasNextLine()) {        
+				result.append(cin.nextLine() + lineSeparator);
 			}
-			return fileContents.toString();
+			return result.toString();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} finally {
-			scanner.close();
+			cin.close();
 		}
 		return null;
 	}

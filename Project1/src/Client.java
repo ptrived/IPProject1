@@ -126,11 +126,11 @@ public class Client {
 			e.printStackTrace();
 		}
 		finally{
-			//			try {
-			//				client.close();
-			//			} catch (IOException e) {
-			//				e.printStackTrace();
-			//			}
+			try {
+				client.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	private static void printP2PResponse(P2PResponse p2pResp) {

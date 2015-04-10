@@ -53,13 +53,7 @@ public class Server{
 	public static void main(String args[]){
 		try {
 			myService = new ServerSocket(portNum);
-		} catch (SocketException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		System.out.println(Status.sysName+ " system is up");
-		try {
+			System.out.println(Status.sysName+ " system is up");
 			while(true){
 				Socket serverSocket = myService.accept();
 				P2SCommunication clientThread = new P2SCommunication(serverSocket);
@@ -67,6 +61,10 @@ public class Server{
 				t.start();
 			}
 
+		} catch (SocketException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
