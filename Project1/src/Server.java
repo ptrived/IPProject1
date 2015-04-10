@@ -19,11 +19,6 @@ public class Server{
 	private  Map<Integer, RFCData> peerMap;
 	private static Server server;
 
-	static{
-//		server.activePeers = new HashMap<String, Integer>();
-//		server.peerMap = new HashMap<Integer, RFCData>();		
-	}
-	
 	public  void setActivePeers(Map<String, Integer> activePeers) {
 		synchronized (this.activePeers) {
 			this.activePeers = activePeers;
