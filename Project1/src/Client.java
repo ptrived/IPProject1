@@ -41,7 +41,6 @@ public class Client {
 			ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
 			String hostname = null, title;
 			int portNum = 0;
-			System.out.println("Streams created");
 			while(true){
 				P2SRequest request;
 				P2SResponse response;
