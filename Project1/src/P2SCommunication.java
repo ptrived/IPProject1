@@ -110,6 +110,17 @@ public class P2SCommunication implements Runnable{
 			//e.printStackTrace();
 		}finally{
 			try {
+				String hostName = getHostIp(this.socket.getRemoteSocketAddress().toString());
+				Server.getInstance().getActivePeers().remove(hostName);
+				Map<Integer, RFCData> map = Server.getInstance().getPeerMap();
+				Iterator<Integer> it = map.keySet().iterator();
+				while(it.hasNext()){
+					RFCData rfc = map.get(it.next());
+					List<String> list = rfc.peers;
+					if(list.contains(hostName)){
+						list.remove(hostName);
+					}
+				}
 				socket.close();
 			} catch (IOException e) {
 				e.printStackTrace();
