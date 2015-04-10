@@ -136,11 +136,11 @@ public class Client {
 	}
 	private static void printP2PResponse(P2PResponse p2pResp) {
 		System.out.println(p2pResp.version+" "+p2pResp.statusCode+" "+Status.statusMap.get(p2pResp.statusCode));
-		System.out.println(p2pResp.getDate());
-		System.out.println(p2pResp.getOS());
-		System.out.println(p2pResp.getLastModified());
-		System.out.println(p2pResp.getContentLength());
-		System.out.println(p2pResp.getContentType());
+		System.out.println("Date : "+p2pResp.getDate());
+		System.out.println("OS : "+p2pResp.getOS());
+		System.out.println("Last-Modified : "+p2pResp.getLastModified());
+		System.out.println("Content-Length : "+p2pResp.getContentLength());
+		System.out.println("Content-Type : "+p2pResp.getContentType());
 	}
 	private static void printP2SResponse(P2SResponse response){
 		int listSize = response.responseList.size();

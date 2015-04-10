@@ -1,12 +1,11 @@
 import java.io.Serializable;
-import java.util.Date;
 
 @SuppressWarnings("serial")
 public class P2PResponse implements Serializable{
-	
-	Date date;
+
+	String date;
 	String OS;
-	Date lastModified;
+	String lastModified;
 	long contentLength;
 	String contentType;
 	String version;
@@ -23,10 +22,10 @@ public class P2PResponse implements Serializable{
 	public void setVersion(String version) {
 		this.version = version;
 	}
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 	public String getOS() {
@@ -35,10 +34,10 @@ public class P2PResponse implements Serializable{
 	public void setOS(String oS) {
 		OS = oS;
 	}
-	public Date getLastModified() {
+	public String getLastModified() {
 		return lastModified;
 	}
-	public void setLastModified(Date lastModified) {
+	public void setLastModified(String lastModified) {
 		this.lastModified = lastModified;
 	}
 	public long getContentLength() {
