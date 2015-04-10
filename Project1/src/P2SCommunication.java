@@ -39,17 +39,19 @@ public class P2SCommunication implements Runnable{
 				case WRONG:
 					break;
 				case ADD:
-					System.out.println("SERVER: Receieved add req : current map size : "+ Server.getInstance().getActivePeers().size());
-					Server.getInstance().getActivePeers().put(request.hostname, request.portNum);
+					Server.getInstance().getActivePeers().put(this.socket.getRemoteSocketAddress().toString(), request.portNum);
+					//Server.getInstance().getActivePeers().put(request.hostname, request.portNum);
 					RFCNum = Integer.parseInt(command[2]);
 
 					if(Server.getInstance().getPeerMap().containsKey(RFCNum)){
 						data = Server.getInstance().getPeerMap().get(RFCNum);
-						data.peers.add(request.hostname);
+						//data.peers.add(request.hostname);
+						data.peers.add(this.socket.getRemoteSocketAddress().toString());
 					}else{
 						data = new RFCData();
 						data.peers = new ArrayList<String>();
-						data.peers.add(request.hostname);
+						//data.peers.add(request.hostname);
+						data.peers.add(this.socket.getRemoteSocketAddress().toString());
 						data.title = request.title;
 						Server.getInstance().getPeerMap().put(RFCNum, data);
 					}
@@ -60,7 +62,7 @@ public class P2SCommunication implements Runnable{
 					outputList.add("RFC " + RFCNum + " " + request.title + " " + request.hostname + " " + request.portNum);
 					response.setResponseList(outputList);
 					
-					System.out.println("SERVER: Processed add req : current map size : "+ Server.getInstance().getActivePeers().size());
+					
 					out.writeObject(response);
 					break;
 				case LOOKUP:

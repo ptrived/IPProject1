@@ -20,8 +20,8 @@ public class Client {
 	static{
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			System.out.println("Enter your hostname : ");
-			clientHostName = br.readLine();
+			//System.out.println("Enter your hostname : ");
+			clientHostName = "localhost";
 			System.out.println("Enter the upload port number : ");
 			clientPortNum = Integer.parseInt(br.readLine());
 			clientService = new ServerSocket(clientPortNum);
@@ -70,7 +70,7 @@ public class Client {
 					System.out.print("Title : ");
 					title = br.readLine();
 					//					request = new P2SRequest(command, hostname, portNum, title);
-					System.out.println("active peers size : " + Server.getInstance().getActivePeers().size());
+					//System.out.println("active peers size : " + Server.getInstance().getActivePeers().size());
 					request = new P2SRequest(command, clientHostName, clientPortNum, title);
 					out.writeObject(request);
 					response = (P2SResponse) in.readObject();
@@ -82,7 +82,7 @@ public class Client {
 					System.out.print("Title : ");
 					title = br.readLine();
 					//request = new P2SRequest(command, hostname, portNum, title);
-					System.out.println("active peers size : " + Server.getInstance().getActivePeers().size());
+					//System.out.println("active peers size : " + Server.getInstance().getActivePeers().size());
 					request = new P2SRequest(command, clientHostName, clientPortNum, title);
 					out.writeObject(request);
 					response = (P2SResponse) in.readObject();
@@ -91,7 +91,7 @@ public class Client {
 
 				case LIST:
 					//request = new P2SRequest(command, hostname, portNum, "");
-					System.out.println("active peers size : " + Server.getInstance().getActivePeers().size());
+					//System.out.println("active peers size : " + Server.getInstance().getActivePeers().size());
 					request = new P2SRequest(command, clientHostName, clientPortNum, "");
 					out.writeObject(request);
 					response = (P2SResponse) in.readObject();
@@ -127,7 +127,6 @@ public class Client {
 					    int bytesRead = inStream.read(b_arr, 0, b_arr.length);
 					    outStream.write(b_arr, 0, bytesRead);
 					    outStream.close();
-					    //sock.close();
 						
 						P2PResponse p2pResp = (P2PResponse) inPeer.readObject();
 						printP2PResponse(p2pResp);
