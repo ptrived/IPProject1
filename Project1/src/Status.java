@@ -3,6 +3,7 @@ import java.util.HashMap;
 
 public class Status {
 	public static HashMap<Integer,String> statusMap = new HashMap<Integer,String>();
+	public static String sysName = "P2P-CI/1.0"; 
 	static{
 		statusMap.put(200,"OK");
 		statusMap.put(400,"Bad Request");

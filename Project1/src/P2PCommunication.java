@@ -11,12 +11,9 @@ import java.util.Date;
 
 public class P2PCommunication implements Runnable{
 	ServerSocket clientService;
-	Socket clientSocket;
-	String sysName = "P2P-CI/1.0";
-
+	Socket clientSocket;	
 	public P2PCommunication(ServerSocket socket){
 		this.clientService = socket;
-
 	}
 
 	@Override
@@ -39,7 +36,7 @@ public class P2PCommunication implements Runnable{
 				OutputStream outStream = clientSocket.getOutputStream();
 				outStream.write(b_arr, 0, b_arr.length);
 				outStream.flush();
-				p2pResp.setVersion(sysName);
+				p2pResp.setVersion(Status.sysName);
 				p2pResp.setDate(new Date());
 				p2pResp.setOS(p2pReq.getOS());
 				p2pResp.setContentLength(0);

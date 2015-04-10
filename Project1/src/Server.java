@@ -13,7 +13,6 @@ class RFCData{
 }
 public class Server{
 	static final int portNum = 7734;
-	String sysName = "P2P-CI/1.0";
 	private static ServerSocket myService = null ;
 	private  Map<String, Integer> activePeers;	
 	private  Map<Integer, RFCData> peerMap;
@@ -24,34 +23,33 @@ public class Server{
 			this.activePeers = activePeers;
 		}		
 	}
-	
+
 	public  void setPeerMap(Map<Integer, RFCData> peerMap) {
 		this.peerMap = peerMap;
 	}
-	
+
 	public  Map<Integer, RFCData> getPeerMap() {
 		return this.peerMap;
 	}
-	
+
 	public  Map<String, Integer> getActivePeers() {
 		synchronized (this.activePeers) {
 			return this.activePeers;
 		}
 	}
-	
+
 	private Server(){
 	}
-	
+
 	public static Server getInstance(){
 		if(server == null){
 			server = new Server();
 			server.activePeers = new HashMap<String, Integer>();
 			server.peerMap = new HashMap<Integer, RFCData>();	
 		}
-			return server;
-		
+		return server;
 	}
-	
+
 	public static void main(String args[]){
 		try {
 			myService = new ServerSocket(portNum);
@@ -60,7 +58,7 @@ public class Server{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("P2P-CI/1.0 system is up");
+		System.out.println(Status.sysName+ " system is up");
 		try {
 			while(true){
 				Socket serverSocket = myService.accept();
@@ -68,7 +66,7 @@ public class Server{
 				Thread t = new Thread(clientThread);
 				t.start();
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
