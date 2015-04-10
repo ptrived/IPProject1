@@ -1,7 +1,7 @@
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -10,6 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 
 
 public class P2PCommunication implements Runnable{
@@ -60,17 +61,24 @@ public class P2PCommunication implements Runnable{
 
 	}
 
-	private String getContent(File file) {		
-		String result = null;		   
+	private String getContent(File file) {
+
+		StringBuilder fileContents = new StringBuilder((int)file.length());
+		Scanner scanner = null;
 		try {
-			FileReader reader = new FileReader(file);
-			char[] c = new char[(int) file.length()];
-			reader.read(c);
-			result = new String(c);
-			reader.close();
-		} catch (IOException e) {
+			scanner = new Scanner(file);
+			String lineSeparator = System.getProperty("line.separator");
+
+			while(scanner.hasNextLine()) {        
+				fileContents.append(scanner.nextLine() + lineSeparator);
+			}
+			return fileContents.toString();
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		} finally {
+			scanner.close();
 		}
-		return result;
+		return null;
 	}
 }
+
