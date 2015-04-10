@@ -10,6 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Client {
+	final static int RFC_SIZE = 100000;
 	static Socket client = null;
 	static final int portNum = 7734;
 	static int clientPortNum;
@@ -105,7 +106,7 @@ public class Client {
 						String[] strArr = p2pReq.command.split(" ");
 						String fileName = strArr[2];
 						String filePath = "F:\\rfc\\"+fileName+".txt";
-						byte[] b_arr = new byte[1024];
+						byte[] b_arr = new byte[RFC_SIZE];
 						InputStream inStream = peerSocket.getInputStream();
 						FileOutputStream f = new FileOutputStream(filePath);
 						BufferedOutputStream outStream = new BufferedOutputStream(f);
