@@ -29,6 +29,7 @@ public class P2PCommunication implements Runnable{
 				p2pResp.setDate(new Date());
 				p2pResp.setOS(p2pReq.getOS());
 				p2pResp.setContentLength(0);
+				p2pResp.setStatusCode(200);
 				out.writeObject(p2pResp);
 			} catch (IOException e) {
 				e.printStackTrace();
