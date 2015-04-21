@@ -47,7 +47,7 @@ public class Client {
 				P2SResponse response;
 				System.out.println("Enter the command:");
 				String command = br.readLine();
-				Command cmd = P2SRequest.parseCommand(command);		
+				P2SRequest.Command cmd = P2SRequest.parseCommand(command);		
 				switch(cmd){
 				case BAD:
 					response = new P2SResponse();
@@ -105,7 +105,7 @@ public class Client {
 						//File Transfer
 						String[] strArr = p2pReq.command.split(" ");
 						String fileName = strArr[2];
-						String filePath = "F:\\rfc\\"+fileName+".txt";
+						String filePath = "F:\\rfcDownload\\"+fileName+".txt";
 						byte[] b_arr = new byte[RFC_SIZE];
 						InputStream inStream = peerSocket.getInputStream();
 						FileOutputStream f = new FileOutputStream(filePath);

@@ -1,8 +1,10 @@
 import java.io.Serializable;
 
-
 @SuppressWarnings("serial")
 public class P2SRequest implements Serializable{
+	public static enum Command {
+		  ADD, LIST, LOOKUP, GET, WRONG, BAD
+	}
 	String command;	
 	int portNum;
 	String title;

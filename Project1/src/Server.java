@@ -3,14 +3,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-
-class RFCData{
-	String title;
-	List<String> peers;
-}
 public class Server{
 	static final int portNum = 7734;
 	private static ServerSocket myService = null ;

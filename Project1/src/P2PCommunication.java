@@ -33,7 +33,7 @@ public class P2PCommunication implements Runnable{
 				//File Transfer
 				String[] strArr = p2pReq.command.split(" ");
 				String fileName = strArr[2];
-				String filePath = "F:\\rfc\\"+fileName+".txt";
+				String filePath = "F:\\rfcDownload\\"+fileName+".txt";
 				File file = new File(filePath);
 				byte[] b_arr = new byte[(int) file.length()];
 				BufferedInputStream inStream = new BufferedInputStream(new FileInputStream(filePath));
