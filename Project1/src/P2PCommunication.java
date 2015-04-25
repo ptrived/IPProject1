@@ -45,6 +45,7 @@ public class P2PCommunication implements Runnable{
 					p2pResp.setContentType("text/plain");
 					p2pResp.setData(getContent(file));
 					p2pResp.setStatusCode(200);
+					p2pResp.setPhrase(Status.statusMap.get(200));
 					out.writeObject(p2pResp);
 				} catch (FileNotFoundException e) {
 					System.out.println("File not found, Exception: " + e.getMessage());
