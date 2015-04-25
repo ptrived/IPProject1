@@ -45,7 +45,12 @@ public class Client {
 			while(true){
 				P2SRequest request;
 				P2SResponse response;
-				System.out.println("Enter the command:");
+				System.out.println("Menu:");
+				System.out.println("(i) ADD RFC <RFC Num> P2P-CI/1.0");
+				System.out.println("(ii) LOOKUP RFC <RFC Num> P2P-CI/1.0");
+				System.out.println("(iii) LIST ALL P2P-CI/1.0");
+				System.out.println("(iv) GET RFC <RFC Num> P2P-CI/1.0");
+				System.out.println("Enter the command in the above mentioned syntax:");
 				String command = br.readLine();
 				P2SRequest.Command cmd = P2SRequest.parseCommand(command);		
 				switch(cmd){
@@ -99,22 +104,26 @@ public class Client {
 					try{
 						Socket peerSocket = new Socket(hostname, portNum);
 						System.out.println("Peer Connected"); 
-						ObjectInputStream inPeer = new ObjectInputStream(peerSocket.getInputStream());
+						InputStream inStream = peerSocket.getInputStream();
+						ObjectInputStream inPeer = new ObjectInputStream(inStream);
 						ObjectOutputStream outPeer = new ObjectOutputStream(peerSocket.getOutputStream());
 						outPeer.writeObject(p2pReq);
 						//File Transfer
 						String[] strArr = p2pReq.command.split(" ");
 						String fileName = strArr[2];
-						String filePath = "F:\\rfcDownload\\"+fileName+".txt";
-						byte[] b_arr = new byte[RFC_SIZE];
-						InputStream inStream = peerSocket.getInputStream();
+						String filePath = System.getProperty("user.dir") + System.getProperty("file.separator")+"Download"+System.getProperty("file.separator") + fileName + ".txt";
+						//byte[] b_arr = new byte[RFC_SIZE];
+						
 						FileOutputStream f = new FileOutputStream(filePath);
 						BufferedOutputStream outStream = new BufferedOutputStream(f);
-						int bytesRead = inStream.read(b_arr, 0, b_arr.length);
-						outStream.write(b_arr, 0, bytesRead);
-						outStream.close();
+						//int bytesRead = inStream.read(b_arr, 0, b_arr.length);
+						//outStream.write(b_arr, 0, bytesRead);
+						
 						P2PResponse p2pResp = (P2PResponse) inPeer.readObject();
 						printP2PResponse(p2pResp);
+						outStream.write(p2pResp.getData().getBytes());
+						
+						outStream.close();
 						peerSocket.close();
 					}
 					catch(Exception e){
