@@ -38,6 +38,8 @@ Menu:
 	P2P-CI/1.0 200 OK
 	RFC <RFCNum> <RFCTitle> <IP of Peer> <UploadPortNum>
 
+Note: We have assumed that the rfc file will be present in the current directory where the class files are present.
+
 - LOOKUP RFC <RFC Num> P2P-CI/1.0
 	Command to lookup the RFC in the server list.
 	It will ask the following information :
@@ -74,7 +76,8 @@ Menu:
 	Content-Length : 0
 	Content-Type : text/plain
 	<Content of the file>
-	
+Note: We have assumed that the rfc file will be downloaded in the current directory where the class files are present.
 
-
+- END
+	This command will close the client program.
 	
