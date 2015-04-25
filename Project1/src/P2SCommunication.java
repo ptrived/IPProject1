@@ -135,7 +135,7 @@ public class P2SCommunication implements Runnable{
 				}
 				socket.close();
 			} catch (IOException ex) {
-				//System.out.println("Encountered IO Exception in P2SCommunication " + e.getMessage());
+				System.out.println(e.getMessage());
 			}
 		}finally{
 			

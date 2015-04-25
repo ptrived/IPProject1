@@ -19,14 +19,14 @@ public class Client {
 	static{
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			System.out.println("Enter the upload port number : ");
+			System.out.println("Enter the upload port number(>1024) : ");
 			clientPortNum = Integer.parseInt(br.readLine());
 			clientService = new ServerSocket(clientPortNum);			
 			P2PCommunication comm = new P2PCommunication(clientService);
 			Thread t = new Thread(comm);
 			t.start();
 		} catch (IOException e) {
-			System.out.println("exception while creating clientSocket " + e);
+			System.out.println("Exception while creating clientSocket " + e.getMessage());
 			System.exit(0);
 		}
 	}
@@ -154,7 +154,7 @@ public class Client {
 		
 	}
 	private static void printP2PResponse(P2PResponse p2pResp) {
-		System.out.println(p2pResp.version+" "+p2pResp.statusCode+" "+Status.statusMap.get(p2pResp.statusCode));
+		System.out.println(p2pResp.version+" "+p2pResp.statusCode+" "+p2pResp.getPhrase());
 		System.out.println("Date : "+p2pResp.getDate());
 		System.out.println("OS : "+p2pResp.getOS());
 		System.out.println("Last-Modified : "+p2pResp.getLastModified());

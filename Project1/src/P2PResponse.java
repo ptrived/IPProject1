@@ -16,6 +16,13 @@ public class P2PResponse implements Serializable{
 	long contentLength;
 	String contentType;
 	String version;
+	String phrase;
+	public String getPhrase() {
+		return phrase;
+	}
+	public void setPhrase(String phrase) {
+		this.phrase = phrase;
+	}
 	int statusCode;
 	public int getStatusCode() {
 		return statusCode;
