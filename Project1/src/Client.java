@@ -120,7 +120,8 @@ public class Client {
 						//File Transfer
 						String[] strArr = p2pReq.command.split(" ");
 						String fileName = strArr[2];
-						String filePath = System.getProperty("user.dir") + System.getProperty("file.separator")+"Download"+System.getProperty("file.separator") + fileName + ".txt";
+						//String filePath = System.getProperty("user.dir") + System.getProperty("file.separator")+"Download"+System.getProperty("file.separator") + fileName + ".txt";
+						String filePath = fileName + ".txt";
 						FileOutputStream f = new FileOutputStream(filePath);
 						BufferedOutputStream outStream = new BufferedOutputStream(f);
 						

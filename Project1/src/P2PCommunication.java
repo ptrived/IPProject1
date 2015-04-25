@@ -30,9 +30,10 @@ public class P2PCommunication implements Runnable{
 				//File Transfer
 				String[] strArr = p2pReq.command.split(" ");
 				String fileName = strArr[2];
-				String filePath = System.getProperty("user.dir") + System.getProperty("file.separator")+"Upload"+System.getProperty("file.separator") + fileName + ".txt";
+				//String filePath = System.getProperty("user.dir") + System.getProperty("file.separator")+"Upload"+System.getProperty("file.separator") + fileName + ".txt";
+				String filePath = fileName+".txt";
+
 				File file = new File(filePath);
-				
 				p2pResp.setVersion(Status.sysName);				
 				p2pResp.setOS(System.getProperty("os.name"));
 				p2pResp.setContentLength(file.length());
