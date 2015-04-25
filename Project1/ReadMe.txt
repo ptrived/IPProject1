@@ -38,7 +38,8 @@ Menu:
 	P2P-CI/1.0 200 OK
 	RFC <RFCNum> <RFCTitle> <IP of Peer> <UploadPortNum>
 
-Note: We have assumed that the rfc file will be present in the current directory where the class files are present.
+Note: We have assumed that the rfc file will be present in the current directory where the class files are present and 
+the name of the rfc file will be of form rfc<RFCNum>.txt. For Example : rfc2232.txt
 
 - LOOKUP RFC <RFC Num> P2P-CI/1.0
 	Command to lookup the RFC in the server list.
