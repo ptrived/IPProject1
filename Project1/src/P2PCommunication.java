@@ -44,6 +44,8 @@ public class P2PCommunication implements Runnable{
 				p2pResp.setData(getContent(file));
 				p2pResp.setStatusCode(200);
 				out.writeObject(p2pResp);
+			} catch (FileNotFoundException e) {
+				System.out.println("File not found, Exception: " + e.getMessage());
 				
 			} catch (IOException e) {
 				System.out.println("Encountered IO Exception " + e.getMessage());

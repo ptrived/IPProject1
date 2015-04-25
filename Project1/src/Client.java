@@ -100,17 +100,19 @@ public class Client {
 					printP2SResponse(response);
 					break;
 				case GET:
+					try{
 					System.out.println("Host : ");
 					hostname = br.readLine();
-					System.out.print("OS : ");
-					String OS  = br.readLine();
+					//System.out.print("OS : ");
+					//String OS  = br.readLine();
+					String OS = System.getProperty("os.name");
 					System.out.print("Port : ");
 					portNum  = Integer.parseInt(br.readLine());
 					P2PRequest p2pReq = new P2PRequest();
 					p2pReq.setCommand(command);
 					p2pReq.setHost(hostname);
 					p2pReq.setOS(OS);
-					try{
+					
 						Socket peerSocket = new Socket(hostname, portNum);
 						System.out.println("Peer Connected"); 
 						InputStream inStream = peerSocket.getInputStream();
@@ -120,7 +122,7 @@ public class Client {
 						//File Transfer
 						String[] strArr = p2pReq.command.split(" ");
 						String fileName = strArr[2];
-						//String filePath = System.getProperty("user.dir") + System.getProperty("file.separator")+"Download"+System.getProperty("file.separator") + fileName + ".txt";
+	
 						String filePath = fileName + ".txt";
 						FileOutputStream f = new FileOutputStream(filePath);
 						BufferedOutputStream outStream = new BufferedOutputStream(f);
@@ -134,6 +136,7 @@ public class Client {
 					catch(Exception e){
 						System.out.println("Exception occurred during File transfer:" + e.getMessage());
 					}
+					
 					break;
 				}	
 			}
@@ -141,8 +144,9 @@ public class Client {
 			System.out.println("Closing the socket due to " + e.getMessage());
 			try {
 				client.close();
-			} catch (IOException e1) {
-//				System.out.println("exception wa");
+				System.exit(0);
+			} catch (Exception e1) {
+				System.exit(0);
 			}
 		}catch(Exception e){
 			System.out.println("Exception occurred while executing the commands:" + e.getMessage());

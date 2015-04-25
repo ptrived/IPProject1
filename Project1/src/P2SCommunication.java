@@ -33,44 +33,58 @@ public class P2SCommunication implements Runnable{
 					break;
 				case ADD:
 					Server.getInstance().getActivePeers().put(getHostIp(this.socket.getRemoteSocketAddress().toString()), request.portNum);
-					RFCNum = Integer.parseInt(command[2]);
-					if(Server.getInstance().getPeerMap().containsKey(RFCNum)){
-						data = Server.getInstance().getPeerMap().get(RFCNum);
-						data.peers.add(getHostIp(this.socket.getRemoteSocketAddress().toString()));
-					}else{
-						data = new RFCData();
-						data.peers = new ArrayList<String>();
-						data.peers.add(getHostIp(this.socket.getRemoteSocketAddress().toString()));
-						data.title = request.title;
-						Server.getInstance().getPeerMap().put(RFCNum, data);
-					}
-					response.setStatusCode(200);
-					response.setVersion(Status.sysName);
-					response.setPhrase(Status.statusMap.get(200));
-					outputList.add("RFC " + RFCNum + " " + request.title + " " + getHostIp(this.socket.getRemoteSocketAddress().toString()) + " " + request.portNum);
-					response.setResponseList(outputList);
-					out.writeObject(response);
-					break;
-				case LOOKUP:
-					RFCNum = Integer.parseInt(command[2]);
-					if(Server.getInstance().getPeerMap().containsKey(RFCNum)){
-						data = Server.getInstance().getPeerMap().get(RFCNum);
-						List<String> peerlist = data.peers;				
-						for(String peer : peerlist){
-							portNumber = Server.getInstance().getActivePeers().get(peer);
-							outputList.add("RFC " + RFCNum + " " + request.title + " " + peer + " " + portNumber);
+					try{
+						RFCNum = Integer.parseInt(command[2]);
+						if(Server.getInstance().getPeerMap().containsKey(RFCNum)){
+							data = Server.getInstance().getPeerMap().get(RFCNum);
+							data.peers.add(getHostIp(this.socket.getRemoteSocketAddress().toString()));
+						}else{
+							data = new RFCData();
+							data.peers = new ArrayList<String>();
+							data.peers.add(getHostIp(this.socket.getRemoteSocketAddress().toString()));
+							data.title = request.title;
+							Server.getInstance().getPeerMap().put(RFCNum, data);
 						}
 						response.setStatusCode(200);
 						response.setVersion(Status.sysName);
 						response.setPhrase(Status.statusMap.get(200));
+						outputList.add("RFC " + RFCNum + " " + request.title + " " + getHostIp(this.socket.getRemoteSocketAddress().toString()) + " " + request.portNum);
 						response.setResponseList(outputList);
-					}else{
-						response.setStatusCode(404);
+						out.writeObject(response);
+					}catch(NumberFormatException ex){
+						response.setStatusCode(400);
 						response.setVersion(Status.sysName);
-						response.setPhrase(Status.statusMap.get(404));
-						response.setResponseList(outputList);
+						response.setPhrase(Status.statusMap.get(400));
+						out.writeObject(response);
 					}
-					out.writeObject(response);
+					break;
+				case LOOKUP:
+					try{
+						RFCNum = Integer.parseInt(command[2]);
+						if(Server.getInstance().getPeerMap().containsKey(RFCNum)){
+							data = Server.getInstance().getPeerMap().get(RFCNum);
+							List<String> peerlist = data.peers;				
+							for(String peer : peerlist){
+								portNumber = Server.getInstance().getActivePeers().get(peer);
+								outputList.add("RFC " + RFCNum + " " + request.title + " " + peer + " " + portNumber);
+							}
+							response.setStatusCode(200);
+							response.setVersion(Status.sysName);
+							response.setPhrase(Status.statusMap.get(200));
+							response.setResponseList(outputList);
+						}else{
+							response.setStatusCode(404);
+							response.setVersion(Status.sysName);
+							response.setPhrase(Status.statusMap.get(404));
+							response.setResponseList(outputList);
+						}
+						out.writeObject(response);
+					}catch(NumberFormatException ex){
+						response.setStatusCode(400);
+						response.setVersion(Status.sysName);
+						response.setPhrase(Status.statusMap.get(400));
+						out.writeObject(response);
+					}
 					break;
 				case LIST:
 					Iterator<Map.Entry<Integer, RFCData>> it = Server.getInstance().getPeerMap().entrySet().iterator();
@@ -107,8 +121,6 @@ public class P2SCommunication implements Runnable{
 			System.out.println("Encountered Exception " + e.getMessage());
 		}
 		catch (IOException e) {
-			System.out.println("Encountered IO Exception " + e.getMessage());
-		}finally{
 			try {
 				String hostName = getHostIp(this.socket.getRemoteSocketAddress().toString());
 				Server.getInstance().getActivePeers().remove(hostName);
@@ -122,9 +134,11 @@ public class P2SCommunication implements Runnable{
 					}
 				}
 				socket.close();
-			} catch (IOException e) {
-				System.out.println("Encountered IO Exception " + e.getMessage());
+			} catch (IOException ex) {
+				//System.out.println("Encountered IO Exception in P2SCommunication " + e.getMessage());
 			}
+		}finally{
+			
 		}
 	}
 

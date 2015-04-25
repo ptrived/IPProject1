@@ -57,7 +57,7 @@ public class Server{
 		} catch (SocketException e) {
 			System.out.println("Encountered Socket Exception " + e.getMessage());
 		} catch (IOException e) {
-			System.out.println("Encountered IO Exception " + e.getMessage());
+			System.out.println("Encountered IO Exception in Server" + e.getMessage());
 		} catch (Exception e) {
 			System.out.println("Encountered Exception " + e.getMessage());
 		}
