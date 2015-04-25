@@ -3,7 +3,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class P2SRequest implements Serializable{
 	public static enum Command {
-		  ADD, LIST, LOOKUP, GET, WRONG, BAD
+		  ADD, LIST, LOOKUP, GET, WRONG, BAD, END
 	}
 	String command;	
 	int portNum;

@@ -104,10 +104,10 @@ public class P2SCommunication implements Runnable{
 			}
 
 		} catch (ClassNotFoundException e) {
-			//e.printStackTrace();
+			System.out.println("Encountered Exception " + e.getMessage());
 		}
 		catch (IOException e) {
-			//e.printStackTrace();
+			System.out.println("Encountered IO Exception " + e.getMessage());
 		}finally{
 			try {
 				String hostName = getHostIp(this.socket.getRemoteSocketAddress().toString());
@@ -123,7 +123,7 @@ public class P2SCommunication implements Runnable{
 				}
 				socket.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.out.println("Encountered IO Exception " + e.getMessage());
 			}
 		}
 	}

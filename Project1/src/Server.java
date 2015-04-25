@@ -55,11 +55,11 @@ public class Server{
 				t.start();
 			}
 		} catch (SocketException e) {
-			e.printStackTrace();
+			System.out.println("Encountered Socket Exception " + e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Encountered IO Exception " + e.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Encountered Exception " + e.getMessage());
 		}
 	}
 }

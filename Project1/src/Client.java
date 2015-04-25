@@ -46,14 +46,23 @@ public class Client {
 				P2SRequest request;
 				P2SResponse response;
 				System.out.println("Menu:");
-				System.out.println("(i) ADD RFC <RFC Num> P2P-CI/1.0");
-				System.out.println("(ii) LOOKUP RFC <RFC Num> P2P-CI/1.0");
-				System.out.println("(iii) LIST ALL P2P-CI/1.0");
-				System.out.println("(iv) GET RFC <RFC Num> P2P-CI/1.0");
-				System.out.println("Enter the command in the above mentioned syntax:");
+				System.out.println("(i)\t ADD RFC <RFC Num> P2P-CI/1.0");
+				System.out.println("(ii)\t LOOKUP RFC <RFC Num> P2P-CI/1.0");
+				System.out.println("(iii)\t LIST ALL P2P-CI/1.0");
+				System.out.println("(iv)\t GET RFC <RFC Num> P2P-CI/1.0");
+				System.out.println("(v)\t END");
+				System.out.println("Enter the command in the above mentioned format:");
 				String command = br.readLine();
+				if(command.trim().equalsIgnoreCase("end")){
+					System.out.println("Closing Client");
+					client.close();
+					System.exit(1);
+				}
 				P2SRequest.Command cmd = P2SRequest.parseCommand(command);		
 				switch(cmd){
+				case END:
+					client.close();
+					System.exit(1);
 				case BAD:
 					response = new P2SResponse();
 					response.setVersion(Status.sysName);
@@ -112,36 +121,32 @@ public class Client {
 						String[] strArr = p2pReq.command.split(" ");
 						String fileName = strArr[2];
 						String filePath = System.getProperty("user.dir") + System.getProperty("file.separator")+"Download"+System.getProperty("file.separator") + fileName + ".txt";
-						//byte[] b_arr = new byte[RFC_SIZE];
-						
 						FileOutputStream f = new FileOutputStream(filePath);
 						BufferedOutputStream outStream = new BufferedOutputStream(f);
-						//int bytesRead = inStream.read(b_arr, 0, b_arr.length);
-						//outStream.write(b_arr, 0, bytesRead);
 						
 						P2PResponse p2pResp = (P2PResponse) inPeer.readObject();
 						printP2PResponse(p2pResp);
 						outStream.write(p2pResp.getData().getBytes());
-						
 						outStream.close();
 						peerSocket.close();
 					}
 					catch(Exception e){
-						e.printStackTrace();
+						System.out.println("Exception occurred during File transfer:" + e.getMessage());
 					}
 					break;
 				}	
 			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		finally{
+		}catch(IOException e){
+			System.out.println("Closing the socket due to " + e.getMessage());
 			try {
 				client.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (IOException e1) {
+//				System.out.println("exception wa");
 			}
+		}catch(Exception e){
+			System.out.println("Exception occurred while executing the commands:" + e.getMessage());
 		}
+		
 	}
 	private static void printP2PResponse(P2PResponse p2pResp) {
 		System.out.println(p2pResp.version+" "+p2pResp.statusCode+" "+Status.statusMap.get(p2pResp.statusCode));

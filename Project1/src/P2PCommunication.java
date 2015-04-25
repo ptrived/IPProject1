@@ -1,11 +1,8 @@
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -34,15 +31,8 @@ public class P2PCommunication implements Runnable{
 				String[] strArr = p2pReq.command.split(" ");
 				String fileName = strArr[2];
 				String filePath = System.getProperty("user.dir") + System.getProperty("file.separator")+"Upload"+System.getProperty("file.separator") + fileName + ".txt";
-				//String filePath = "\\Upload\\"+fileName+".txt";
 				File file = new File(filePath);
-				//BufferedInputStream inStream = new BufferedInputStream(new FileInputStream(filePath));
-				/*byte[] b_arr = new byte[(int) file.length()];
-				BufferedInputStream inStream = new BufferedInputStream(new FileInputStream(filePath));
-				inStream.read(b_arr, 0, b_arr.length);
-				OutputStream outStream = clientSocket.getOutputStream();
-				outStream.write(b_arr, 0, b_arr.length);
-				outStream.flush();*/
+				
 				p2pResp.setVersion(Status.sysName);				
 				p2pResp.setOS(System.getProperty("os.name"));
 				p2pResp.setContentLength(file.length());
@@ -53,11 +43,11 @@ public class P2PCommunication implements Runnable{
 				p2pResp.setData(getContent(file));
 				p2pResp.setStatusCode(200);
 				out.writeObject(p2pResp);
-				//inStream.close();
+				
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.out.println("Encountered IO Exception " + e.getMessage());
 			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+				System.out.println("Encountered Exception " + e.getMessage());
 			}
 		}
 
