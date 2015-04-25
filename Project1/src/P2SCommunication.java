@@ -66,7 +66,7 @@ public class P2SCommunication implements Runnable{
 							List<String> peerlist = data.peers;				
 							for(String peer : peerlist){
 								portNumber = Server.getInstance().getActivePeers().get(peer);
-								outputList.add("RFC " + RFCNum + " " + request.title + " " + peer + " " + portNumber);
+								outputList.add("RFC " + RFCNum + " " + data.title + " " + peer + " " + portNumber);
 							}
 							response.setStatusCode(200);
 							response.setVersion(Status.sysName);
@@ -102,7 +102,7 @@ public class P2SCommunication implements Runnable{
 
 							for(String peer : peerlist){
 								portNumber = Server.getInstance().getActivePeers().get(peer);
-								outputList.add("RFC " + RFCNum + " " + request.title + " " + peer + " " + portNumber);
+								outputList.add("RFC " + RFCNum + " " + data.title + " " + peer + " " + portNumber);
 							}
 						}
 						response.setStatusCode(200);
