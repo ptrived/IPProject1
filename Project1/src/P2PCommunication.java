@@ -31,15 +31,17 @@ public class P2PCommunication implements Runnable{
 				try{
 					//File Transfer
 					String[] strArr = p2pReq.command.split(" ");
-					if(strArr.length!=4){
+					if(strArr.length<4){
 						p2pResp.setStatusCode(400);
 						p2pResp.setVersion(Status.sysName);
 						p2pResp.setPhrase(Status.statusMap.get(400));
 						try {
 							out.writeObject(p2pResp);
+							continue;
+							//clientSocket.close();
 						} catch (IOException e1) {
 						}
-						continue;
+						//continue;
 					}
 					String fileName = strArr[2];
 					//String filePath = System.getProperty("user.dir") + System.getProperty("file.separator")+"Upload"+System.getProperty("file.separator") + fileName + ".txt";

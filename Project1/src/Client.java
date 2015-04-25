@@ -106,6 +106,12 @@ public class Client {
 						String OS = System.getProperty("os.name");
 						System.out.print("Port : ");
 						portNum  = Integer.parseInt(br.readLine());
+						String[] strArr = command.split(" ");
+						if(strArr.length<4){
+							System.out.println("Invalid command");
+							continue;
+						}
+						
 						P2PRequest p2pReq = new P2PRequest();
 						p2pReq.setCommand(command);
 						p2pReq.setHost(hostname);
@@ -118,9 +124,8 @@ public class Client {
 						ObjectOutputStream outPeer = new ObjectOutputStream(peerSocket.getOutputStream());
 						outPeer.writeObject(p2pReq);
 						//File Transfer
-						String[] strArr = p2pReq.command.split(" ");
+						
 						String fileName = strArr[2];
-
 						String filePath = "rfc" + fileName + ".txt";
 						FileOutputStream f = new FileOutputStream(filePath);
 						BufferedOutputStream outStream = new BufferedOutputStream(f);
