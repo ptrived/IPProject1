@@ -31,9 +31,19 @@ public class P2PCommunication implements Runnable{
 				try{
 					//File Transfer
 					String[] strArr = p2pReq.command.split(" ");
+					if(strArr.length!=4){
+						p2pResp.setStatusCode(400);
+						p2pResp.setVersion(Status.sysName);
+						p2pResp.setPhrase(Status.statusMap.get(400));
+						try {
+							out.writeObject(p2pResp);
+						} catch (IOException e1) {
+						}
+						continue;
+					}
 					String fileName = strArr[2];
 					//String filePath = System.getProperty("user.dir") + System.getProperty("file.separator")+"Upload"+System.getProperty("file.separator") + fileName + ".txt";
-					String filePath = fileName+".txt";
+					String filePath = "rfc"+fileName+".txt";
 
 					File file = new File(filePath);
 					p2pResp.setVersion(Status.sysName);				
@@ -55,7 +65,7 @@ public class P2PCommunication implements Runnable{
 					out.writeObject(p2pResp);
 				}
 			} catch (IOException e) {
-				System.out.println("Encountered IO Exception " + e.getMessage());
+				//System.out.println("Encountered IO Exception " + e.getMessage());
 				System.out.println("File not found, Exception: " + e.getMessage());
 				p2pResp.setStatusCode(400);
 				p2pResp.setVersion(Status.sysName);

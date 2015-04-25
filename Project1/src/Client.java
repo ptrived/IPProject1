@@ -101,18 +101,16 @@ public class Client {
 					break;
 				case GET:
 					try{
-					System.out.println("Host : ");
-					hostname = br.readLine();
-					//System.out.print("OS : ");
-					//String OS  = br.readLine();
-					String OS = System.getProperty("os.name");
-					System.out.print("Port : ");
-					portNum  = Integer.parseInt(br.readLine());
-					P2PRequest p2pReq = new P2PRequest();
-					p2pReq.setCommand(command);
-					p2pReq.setHost(hostname);
-					p2pReq.setOS(OS);
-					
+						System.out.println("Host : ");
+						hostname = br.readLine();
+						String OS = System.getProperty("os.name");
+						System.out.print("Port : ");
+						portNum  = Integer.parseInt(br.readLine());
+						P2PRequest p2pReq = new P2PRequest();
+						p2pReq.setCommand(command);
+						p2pReq.setHost(hostname);
+						p2pReq.setOS(OS);
+
 						Socket peerSocket = new Socket(hostname, portNum);
 						System.out.println("Peer Connected"); 
 						InputStream inStream = peerSocket.getInputStream();
@@ -122,21 +120,25 @@ public class Client {
 						//File Transfer
 						String[] strArr = p2pReq.command.split(" ");
 						String fileName = strArr[2];
-	
-						String filePath = fileName + ".txt";
+
+						String filePath = "rfc" + fileName + ".txt";
 						FileOutputStream f = new FileOutputStream(filePath);
 						BufferedOutputStream outStream = new BufferedOutputStream(f);
-						
+
 						P2PResponse p2pResp = (P2PResponse) inPeer.readObject();
 						printP2PResponse(p2pResp);
 						outStream.write(p2pResp.getData().getBytes());
 						outStream.close();
 						peerSocket.close();
 					}
+					catch(NumberFormatException e){
+						System.out.println("Invalid Port Number");
+						continue;
+					}
 					catch(Exception e){
 						System.out.println("Exception occurred during File transfer:" + e.getMessage());
 					}
-					
+
 					break;
 				}	
 			}
