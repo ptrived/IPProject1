@@ -69,7 +69,7 @@ public class P2PCommunication implements Runnable{
 			} catch (IOException e) {
 				//System.out.println("Encountered IO Exception " + e.getMessage());
 				System.out.println("File not found, Exception: " + e.getMessage());
-				p2pResp.setStatusCode(400);
+				p2pResp.setStatusCode(404);
 				p2pResp.setVersion(Status.sysName);
 				p2pResp.setPhrase(Status.statusMap.get(400));
 				try {
@@ -90,22 +90,17 @@ public class P2PCommunication implements Runnable{
 
 	}
 
-	private String getContent(File file) {
+	private String getContent(File file) throws FileNotFoundException {
 		StringBuilder result = new StringBuilder((int)file.length());
 		Scanner cin = null;
-		try {
-			cin = new Scanner(file);
-			String lineSeparator = System.getProperty("line.separator");
-			while(cin.hasNextLine()) {        
-				result.append(cin.nextLine() + lineSeparator);
-			}
-			return result.toString();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} finally {
-			cin.close();
+
+		cin = new Scanner(file);
+		String lineSeparator = System.getProperty("line.separator");
+		while(cin.hasNextLine()) {        
+			result.append(cin.nextLine() + lineSeparator);
 		}
-		return null;
+		cin.close();
+		return result.toString();
 	}
 }
 

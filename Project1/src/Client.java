@@ -111,7 +111,7 @@ public class Client {
 							System.out.println("Invalid command");
 							continue;
 						}
-						
+
 						P2PRequest p2pReq = new P2PRequest();
 						p2pReq.setCommand(command);
 						p2pReq.setHost(hostname);
@@ -124,7 +124,7 @@ public class Client {
 						ObjectOutputStream outPeer = new ObjectOutputStream(peerSocket.getOutputStream());
 						outPeer.writeObject(p2pReq);
 						//File Transfer
-						
+
 						String fileName = strArr[2];
 						String filePath = "rfc" + fileName + ".txt";
 						FileOutputStream f = new FileOutputStream(filePath);
@@ -141,7 +141,7 @@ public class Client {
 						continue;
 					}
 					catch(Exception e){
-						System.out.println("Exception occurred during File transfer:" + e.getMessage());
+						//System.out.println("Exception occurred during File transfer:" + e.getMessage());
 					}
 
 					break;
@@ -158,16 +158,18 @@ public class Client {
 		}catch(Exception e){
 			System.out.println("Exception occurred while executing the commands:" + e.getMessage());
 		}
-		
+
 	}
 	private static void printP2PResponse(P2PResponse p2pResp) {
 		System.out.println(p2pResp.version+" "+p2pResp.statusCode+" "+p2pResp.getPhrase());
-		System.out.println("Date : "+p2pResp.getDate());
-		System.out.println("OS : "+p2pResp.getOS());
-		System.out.println("Last-Modified : "+p2pResp.getLastModified());
-		System.out.println("Content-Length : "+p2pResp.getContentLength());
-		System.out.println("Content-Type : "+p2pResp.getContentType());
-		System.out.println(p2pResp.getData());
+		if(p2pResp.statusCode==200){
+			System.out.println("Date : "+p2pResp.getDate());
+			System.out.println("OS : "+p2pResp.getOS());
+			System.out.println("Last-Modified : "+p2pResp.getLastModified());
+			System.out.println("Content-Length : "+p2pResp.getContentLength());
+			System.out.println("Content-Type : "+p2pResp.getContentType());
+			System.out.println(p2pResp.getData());
+		}
 	}
 	private static void printP2SResponse(P2SResponse response){
 		int listSize = response.responseList.size();
